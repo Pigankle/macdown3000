@@ -103,6 +103,8 @@
 		500508BEEAB722605BD87FE5 /* MPQuickLookPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = A50D9D0484B046D0B8BADDA6 /* MPQuickLookPreferences.m */; };
 		504AC0000000000000000003 /* MPPDFAnchorInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = 504AC0000000000000000002 /* MPPDFAnchorInjector.m */; };
 		504AC0000000000000000005 /* MPPDFAnchorInjectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 504AC0000000000000000004 /* MPPDFAnchorInjectorTests.m */; };
+		5E7EA10000000000000000A3 /* MPPreviewSourceLocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E7EA10000000000000000A2 /* MPPreviewSourceLocator.m */; };
+		5E7EA10000000000000000A5 /* MPRevealInEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E7EA10000000000000000A4 /* MPRevealInEditorTests.m */; };
 		504AC0000000000000000007 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 504AC0000000000000000006 /* PDFKit.framework */; };
 		504AC0000000000000000008 /* PDFKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 504AC0000000000000000006 /* PDFKit.framework */; };
 		53878B92ED0F95BE37209ECC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25948CF406215AF81C0EA4DA /* Cocoa.framework */; };
@@ -617,6 +619,9 @@
 		504AC0000000000000000001 /* MPPDFAnchorInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPDFAnchorInjector.h; sourceTree = "<group>"; };
 		504AC0000000000000000002 /* MPPDFAnchorInjector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPDFAnchorInjector.m; sourceTree = "<group>"; };
 		504AC0000000000000000004 /* MPPDFAnchorInjectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPDFAnchorInjectorTests.m; sourceTree = "<group>"; };
+		5E7EA10000000000000000A1 /* MPPreviewSourceLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPreviewSourceLocator.h; sourceTree = "<group>"; };
+		5E7EA10000000000000000A2 /* MPPreviewSourceLocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPreviewSourceLocator.m; sourceTree = "<group>"; };
+		5E7EA10000000000000000A4 /* MPRevealInEditorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPRevealInEditorTests.m; sourceTree = "<group>"; };
 		504AC0000000000000000006 /* PDFKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PDFKit.framework; path = System/Library/Frameworks/PDFKit.framework; sourceTree = SDKROOT; };
 		5162FB5F85C6B4B09403BE65 /* MPHTMLResourceURLs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPHTMLResourceURLs.h; sourceTree = "<group>"; };
 		53056C5D1D3F14882629B27C /* MPSidebarSyncCoordinator.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MPSidebarSyncCoordinator.m; path = MacDown/Code/Sidebar/MPSidebarSyncCoordinator.m; sourceTree = "<group>"; };
@@ -927,6 +932,8 @@
 				1F0D9D83194AC83C008E1856 /* MPDocument.xib */,
 				504AC0000000000000000001 /* MPPDFAnchorInjector.h */,
 				504AC0000000000000000002 /* MPPDFAnchorInjector.m */,
+				5E7EA10000000000000000A1 /* MPPreviewSourceLocator.h */,
+				5E7EA10000000000000000A2 /* MPPreviewSourceLocator.m */,
 			);
 			name = Document;
 			path = Code/Document;
@@ -1188,6 +1195,7 @@
 				QLTST00003PVCT00000M /* MPPreviewViewControllerTests.m */,
 				5E44CF1BD72E49A99DA6A4C1 /* MPPaneToggleTests.m */,
 				504AC0000000000000000004 /* MPPDFAnchorInjectorTests.m */,
+				5E7EA10000000000000000A4 /* MPRevealInEditorTests.m */,
 				B2C3D4E5F67890ABCDEF1234 /* MPZoomTests.m */,
 				A0A5A0E543A6B3CE9E17EE7B /* MPFileNodeTests.m */,
 				A01DF3116B648FB08F2D42B0 /* MPFolderWatcherTests.m */,
@@ -1884,6 +1892,7 @@
 				BA2B9EC2E95175092A97B41E /* MPResourceWatcherSet.m in Sources */,
 				1F13B5E1110695033F2B57AE /* MPHTMLResourceURLs.m in Sources */,
 				504AC0000000000000000003 /* MPPDFAnchorInjector.m in Sources */,
+				5E7EA10000000000000000A3 /* MPPreviewSourceLocator.m in Sources */,
 				632DE4286F689FB448FF9357 /* MPFileNode.m in Sources */,
 				0F6EFB9168CB2E074C8EEE64 /* MPFolderWatcher.m in Sources */,
 				C53D672DA7E35889E7361FF3 /* MPFolderSidebarViewController.m in Sources */,
@@ -1948,6 +1957,7 @@
 				QLBLD00006PVCTESTSRC0 /* MPPreviewViewControllerTests.m in Sources */,
 				1457815B1A710E4C40F07FCA /* MPPaneToggleTests.m in Sources */,
 				504AC0000000000000000005 /* MPPDFAnchorInjectorTests.m in Sources */,
+				5E7EA10000000000000000A5 /* MPRevealInEditorTests.m in Sources */,
 				A1B2C3D4E5F67890ABCDEF12 /* MPZoomTests.m in Sources */,
 				00F6EAD22CA0765C131AA4EC /* MPFileNodeTests.m in Sources */,
 				75738FA5CDF1AA53FECC5495 /* MPFolderWatcherTests.m in Sources */,

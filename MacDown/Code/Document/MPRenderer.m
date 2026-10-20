@@ -223,6 +223,12 @@ NS_INLINE NSString *MPHTMLFromMarkdown(
         hoedown_document_render(
             document, ob, inputData.bytes, inputData.length);
         NSString *toc = [NSString stringWithUTF8String:hoedown_buffer_cstr(ob)];
+        // Issue #627: One container for every TOC entry, including the <li>s
+        // outside ul.toc that a first heading deeper than a later one
+        // produces, so the preview can tell generated TOC text from the
+        // document's text.
+        toc = [NSString stringWithFormat:
+            @"<div class=\"macdown-toc\">\n%@</div>", toc];
 
         static NSRegularExpression *tocRegex = nil;
         static dispatch_once_t onceToken;
@@ -688,6 +694,10 @@ NS_INLINE NSString *MPPreviewHeadTags(NSString *checkboxBridgeToken)
     }
     {
         NSURL *url = MPExtensionURL(@"table-resize", @"js");
+        [scripts addObject:[MPScript javaScriptWithURL:url]];
+    }
+    {
+        NSURL *url = MPExtensionURL(@"reveal-in-editor", @"js");
         [scripts addObject:[MPScript javaScriptWithURL:url]];
     }
     if ([d rendererHasSyntaxHighlighting:self])

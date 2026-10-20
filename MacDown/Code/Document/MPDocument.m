@@ -41,6 +41,7 @@
 // Issue #504: PDF export post-processing (clickable internal anchor links).
 #import <PDFKit/PDFKit.h>
 #import "MPPDFAnchorInjector.h"
+#import "MPPreviewSourceLocator.h"
 
 static NSString * const kMPDefaultAutosaveName = @"Untitled";
 
@@ -1934,6 +1935,14 @@ static BOOL MPScanFenceMarker(NSString *line, unichar *outChar, NSUInteger *outL
         return;
     }
 
+    // Issue #627: Option-click in the preview (reveal-in-editor.js).
+    if ([url.scheme isEqualToString:@"x-macdown-reveal"])
+    {
+        [listener ignore];
+        [self handleRevealInEditorURL:url];
+        return;
+    }
+
     switch ([information[WebActionNavigationTypeKey] integerValue])
     {
         case WebNavigationTypeLinkClicked:
@@ -2036,7 +2045,26 @@ static BOOL MPScanFenceMarker(NSString *line, unichar *outChar, NSUInteger *outL
         }
     }
 
+    if (self.editorVisible)
+    {
+        NSString *title = NSLocalizedString(@"Reveal in Editor",
+            @"Preview context menu item that moves the editor's insertion "
+            @"point to the clicked text");
+        NSMenuItem *revealItem = [[NSMenuItem alloc]
+            initWithTitle:title
+            action:@selector(revealInEditorFromContextMenu:)
+            keyEquivalent:@""];
+        revealItem.target = self;
+        [items insertObject:revealItem atIndex:0];
+        [items insertObject:[NSMenuItem separatorItem] atIndex:1];
+    }
+
     return items;
+}
+
+- (void)revealInEditorFromContextMenu:(id)sender
+{
+    [self revealPreviewPointInEditor];
 }
 
 - (void)reloadPreview:(id)sender
@@ -4987,6 +5015,67 @@ to link outside that scope.", \
     NSMutableString *result = [markdown mutableCopy];
     [result replaceCharactersInRange:checkboxContentRange withString:newState];
     return result;
+}
+
+
+#pragma mark - Reveal in Editor
+
+/**
+ * Issue #627: Handle the reveal URL from the preview's option-click.
+ * URL format: x-macdown-reveal://reveal?token=<token>
+ */
+- (void)handleRevealInEditorURL:(NSURL *)url
+{
+    if (![url.host isEqualToString:@"reveal"])
+        return;
+
+    NSString *token = [self queryItemsByNameForURL:url][@"token"];
+    if (!token.length
+        || ![token isEqualToString:self.renderer.checkboxBridgeToken])
+    {
+        NSLog(@"MacDown: Ignored unauthorized reveal request: %@", url);
+        return;
+    }
+    [self revealPreviewPointInEditor];
+}
+
+/**
+ * Issue #627: Move the editor's insertion point to the source of the preview
+ * point last recorded by reveal-in-editor.js, scroll it into view, and focus
+ * the editor.
+ */
+- (void)revealPreviewPointInEditor
+{
+    if (!self.editorVisible)
+        return;
+
+    JSContext *context = self.preview.mainFrame.javaScriptContext;
+    JSValue *value = [context evaluateScript:
+        @"window.macdownRevealCollect ? window.macdownRevealCollect() : null"];
+    NSDictionary *info = value.isObject ? [value toDictionary] : nil;
+    id index = info[@"index"];
+    NSArray *texts = info[@"texts"];
+    if (![index isKindOfClass:[NSNumber class]] || [index integerValue] < 0
+        || ![texts isKindOfClass:[NSArray class]])
+    {
+        NSBeep();
+        return;
+    }
+    NSArray *footnotes = info[@"footnotes"];
+    if (![footnotes isKindOfClass:[NSArray class]])
+        footnotes = nil;
+    NSInteger offset = [info[@"offset"] integerValue];
+
+    NSString *markdown = [self.editor.string copy];
+    NSUInteger location = [MPPreviewSourceLocator
+        sourceLocationForPreviewTexts:texts footnotes:footnotes
+        index:[index unsignedIntegerValue] offset:(NSUInteger)MAX(offset, 0)
+        inMarkdown:markdown];
+
+    NSRange range = NSMakeRange(location, 0);
+    self.editor.selectedRange = range;
+    [self.editor scrollRangeToVisible:range];
+    [self.editor.window makeFirstResponder:self.editor];
 }
 
 
